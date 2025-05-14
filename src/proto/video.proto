@@ -1,0 +1,67 @@
+syntax = "proto3";
+package v1.video;
+
+option go_package = "v1/video;video";
+
+message User {
+  string id = 1;
+  string username = 2;
+  string avatar_url = 3;
+}
+
+message Video {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string dmm_id = 4;
+  string thumbnail_url = 5;
+  string created_at = 6;
+  int32 likes_count = 7;
+  string sample_url = 8;
+  string url = 9;
+  User author = 10;
+  string direct_url = 11;
+
+  // 新規追加フィールド
+  int32 price = 12;
+  repeated string genres = 13;
+  string maker = 14;
+  repeated string actresses = 15;
+  string series = 16;
+}
+
+message GetVideosRequest {
+  string date = 1; // Optional date filter
+}
+
+message GetVideosResponse {
+  repeated Video videos = 1;
+}
+
+message GetVideoByIdRequest {
+  string id = 1;
+}
+
+message GetVideoByIdResponse {
+  Video video = 1;
+}
+
+// 検索用メッセージの追加
+message SearchVideosRequest {
+  string actress = 1; // Optional
+  string author = 2;  // Optional
+  string genre = 3;   // Optional
+  string series = 4;  // Optional
+  string maker = 5;   // Optional
+  string keyword = 6; // Optional (フリーワード)
+}
+
+message SearchVideosResponse {
+  repeated Video videos = 1;
+}
+
+service VideoService {
+  rpc GetVideos(GetVideosRequest) returns (GetVideosResponse);
+  rpc GetVideoById(GetVideoByIdRequest) returns (GetVideoByIdResponse);
+  rpc SearchVideos(SearchVideosRequest) returns (SearchVideosResponse);
+}
