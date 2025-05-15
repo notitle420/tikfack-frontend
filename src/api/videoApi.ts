@@ -1,63 +1,114 @@
 import { Video } from '../types';
 import {VideoServiceClient} from '../client/clients';
 import {
-  GetVideosRequest,
+  GetVideosByDateRequest,
   GetVideoByIdRequest,
-  GetVideosResponse,
-  GetVideoByIdResponse
-} from '../generated/video_pb';
+  GetVideosByDateResponse,
+  GetVideoByIdResponse,
+  Actress,
+  Genre,
+  Maker,
+  Series,
+  Director
+} from '../generated/proto/video/video_pb';
+
+// 最初の3人の女優名をカンマ区切りで結合するヘルパー関数
+const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => {
+  if (!actresses || actresses.length === 0) return "不明な女優";
+  
+  // 最大3人までの女優名を取得
+  const maxCount = 3;
+  const displayCount = Math.min(actresses.length, maxCount);
+  const names = actresses.slice(0, displayCount).map(a => a.name);
+  
+  return names.join(', ');
+};
 
 export const fetchVideos = async (date?: string): Promise<Video[]> => {
-  const request = new GetVideosRequest();
+  const request = new GetVideosByDateRequest();
   if (date) {
     request.date = date;
   } else {
     request.date = "";
   }
-  const response = (await VideoServiceClient.getVideos(request)) as GetVideosResponse;
-  // 生成されたレスポンスから直接 Video 型の配列を返す（サーバー側で directUrl を設定済み）
+  
+  // メソッド名をgetVideosByDateに変更
+  const response = await VideoServiceClient.getVideosByDate(request);
+  
+  // 新しいproto定義に基づいてVideo型に変換
   return response.videos.map((videoPb: any) => ({
-    id: videoPb.id,
-    title: videoPb.title,
-    description: videoPb.description,
+    // 基本情報
+    id: videoPb.dmmId,
     dmmVideoId: videoPb.dmmId,
+    title: videoPb.title,
+    directUrl: videoPb.directUrl,
+    url: videoPb.url,
+    sampleUrl: videoPb.sampleUrl,
     thumbnailUrl: videoPb.thumbnailUrl,
     createdAt: videoPb.createdAt,
+    price: videoPb.price || 0,
     likesCount: videoPb.likesCount,
-    sampleUrl: videoPb.sampleUrl,
-    url: videoPb.url,
-    directUrl: videoPb.directUrl, // サーバー側で設定された directUrl
+    
+    // UI表示用の追加フィールド
+    description: videoPb.title, // タイトルを説明として使用
+    
+    // 最初の3人の女優を著者として扱う
     author: {
-      id: videoPb.author?.id || '',
-      username: videoPb.author?.username || '',
-      avatarUrl: videoPb.author?.avatarUrl || '',
-    }
+      id: videoPb.actresses && videoPb.actresses.length > 0 ? videoPb.actresses[0].id : "",
+      username: getFirstThreeActressNames(videoPb.actresses),
+      avatarUrl: "/avatars/default.jpg" // デフォルトのアバター
+    },
+    
+    // protoから直接対応するフィールド
+    actresses: videoPb.actresses || [],
+    genres: videoPb.genres || [],
+    makers: videoPb.makers || [],
+    series: videoPb.series || [],
+    directors: videoPb.directors || []
   }));
 };
 
 export const fetchVideoById = async (id: string): Promise<Video> => {
   const request = new GetVideoByIdRequest();
-  request.id = id;
-  const response = (await VideoServiceClient.getVideoById(request)) as GetVideoByIdResponse;
+  // 正しいフィールド名でセット
+  request.dmmId = id;
+  
+  const response = await VideoServiceClient.getVideoById(request);
   const videoPb = response.video;
   if (!videoPb) {
     throw new Error("動画が見つかりませんでした");
   }
+  
   return {
-    id: videoPb.id,
-    title: videoPb.title,
-    description: videoPb.description,
+    // 基本情報
+    id: videoPb.dmmId,
     dmmVideoId: videoPb.dmmId,
+    title: videoPb.title,
+    directUrl: videoPb.directUrl,
+    url: videoPb.url,
+    sampleUrl: videoPb.sampleUrl,
     thumbnailUrl: videoPb.thumbnailUrl,
     createdAt: videoPb.createdAt,
+    price: videoPb.price || 0,
     likesCount: videoPb.likesCount,
-    sampleUrl: videoPb.sampleUrl,
-    url: videoPb.url,
-    directUrl: videoPb.directUrl,
+    
+    // UI表示用の追加フィールド
+    description: `${videoPb.title} - ${videoPb.actresses && videoPb.actresses.length > 0 
+      ? videoPb.actresses.map(a => a.name).join(', ') 
+      : '不明な女優'}の作品`,
+    
+    // 最初の3人の女優を著者として扱う
     author: {
-      id: videoPb.author?.id || '',
-      username: videoPb.author?.username || '',
-      avatarUrl: videoPb.author?.avatarUrl || '',
-    }
+      id: videoPb.actresses && videoPb.actresses.length > 0 ? videoPb.actresses[0].id : "",
+      username: getFirstThreeActressNames(videoPb.actresses),
+      avatarUrl: "/avatars/default.jpg" // デフォルトのアバター
+    },
+    
+    // protoから直接対応するフィールド
+    actresses: videoPb.actresses || [],
+    genres: videoPb.genres || [],
+    makers: videoPb.makers || [],
+    series: videoPb.series || [],
+    directors: videoPb.directors || []
   };
 };

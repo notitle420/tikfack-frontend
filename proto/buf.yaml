@@ -1,6 +1,6 @@
-version: v1
-name: github.com/tikfack/proto
+version: v2
 deps:
+  - buf.build/googleapis/googleapis
   - buf.build/bufbuild/protovalidate
 breaking:
   use:

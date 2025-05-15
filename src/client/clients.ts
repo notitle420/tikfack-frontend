@@ -1,6 +1,6 @@
 import { createConnectTransport } from "@bufbuild/connect-web";
 import { createPromiseClient } from "@bufbuild/connect";
-import { VideoService } from "../generated/video_connectweb";
+import { VideoService } from "../generated/proto/video/video_connectweb";
 
 // トランスポートの設定
 const transport = createConnectTransport({

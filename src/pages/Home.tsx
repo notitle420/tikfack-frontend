@@ -65,6 +65,8 @@ const Home: React.FC = () => {
         createdAt: new Date().toISOString(),
         likesCount: 0,
         sampleUrl: "",
+        url: "",
+        price: 0,
         author: {
           id: "default",
           username: "デフォルトユーザー",
