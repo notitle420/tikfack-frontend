@@ -53,7 +53,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
   return (
     <div className="video-card">
       <div className="video-container" onClick={togglePlay}>
-      {video.sampleUrl ? (
+      {video.directUrl ? (
         <>
           <video
             ref={videoRef}
@@ -93,7 +93,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
             <div className="only-image-overlay">Only Image</div>
           </div>
         )}
-        {!isPlaying && video.sampleUrl && (
+        {!isPlaying && video.directUrl && (
           <div className="play-overlay">
             <span className="play-icon">▶</span>
           </div>
