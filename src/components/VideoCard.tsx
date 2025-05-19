@@ -107,8 +107,14 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
         <h3 className="video-title">{video.title}</h3>
         <p className="video-description">{video.description}</p>
         <div className="video-stats">
-          <span className="likes">♥ {video.likesCount}</span>
-          <span className="date">{new Date(video.createdAt).toLocaleDateString()}</span>
+          <div className="stats-left">
+            <span className="likes">♥ {video.likesCount}</span>
+            <span className="review-count">レビュー数 {video.review.count}</span>
+            <span className="review-average">レビュー平均点 {video.review.average}</span>
+          </div>
+          <div className="stats-right">
+            <span className="date">{new Date(video.createdAt).toLocaleDateString()}</span>
+          </div>
         </div>
       </div>
     </div>

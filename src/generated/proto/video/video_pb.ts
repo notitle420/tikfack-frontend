@@ -224,6 +224,51 @@ export class Director extends Message<Director> {
 }
 
 /**
+ * レビュー情報
+ *
+ * @generated from message video.Review
+ */
+export class Review extends Message<Review> {
+  /**
+   * @generated from field: int32 count = 1;
+   */
+  count = 0;
+
+  /**
+   * @generated from field: float average = 2;
+   */
+  average = 0;
+
+  constructor(data?: PartialMessage<Review>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.Review";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 2, name: "average", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Review {
+    return new Review().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Review {
+    return new Review().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Review {
+    return new Review().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Review | PlainMessage<Review> | undefined, b: Review | PlainMessage<Review> | undefined): boolean {
+    return proto3.util.equals(Review, a, b);
+  }
+}
+
+/**
  * Videoメッセージを重要度順に並び替え
  *
  * @generated from message video.Video
@@ -299,6 +344,13 @@ export class Video extends Message<Video> {
    */
   directors: Director[] = [];
 
+  /**
+   * レビュー情報
+   *
+   * @generated from field: video.Review review = 15;
+   */
+  review?: Review;
+
   constructor(data?: PartialMessage<Video>) {
     super();
     proto3.util.initPartial(data, this);
@@ -321,6 +373,7 @@ export class Video extends Message<Video> {
     { no: 12, name: "makers", kind: "message", T: Maker, repeated: true },
     { no: 13, name: "series", kind: "message", T: Series, repeated: true },
     { no: 14, name: "directors", kind: "message", T: Director, repeated: true },
+    { no: 15, name: "review", kind: "message", T: Review },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Video {
@@ -491,7 +544,327 @@ export class GetVideoByIdResponse extends Message<GetVideoByIdResponse> {
 }
 
 /**
- * 検索用メッセージ（ID指定のみ）
+ * ID指定による検索用メッセージ（すべてのフィールドはoptional）
+ *
+ * @generated from message video.GetVideosByIDRequest
+ */
+export class GetVideosByIDRequest extends Message<GetVideosByIDRequest> {
+  /**
+   * 女優ID（複数指定可能、空でも可）
+   *
+   * @generated from field: repeated string actress_id = 1;
+   */
+  actressId: string[] = [];
+
+  /**
+   * ジャンルID（複数指定可能、空でも可）
+   *
+   * @generated from field: repeated string genre_id = 2;
+   */
+  genreId: string[] = [];
+
+  /**
+   * メーカーID（複数指定可能、空でも可）
+   *
+   * @generated from field: repeated string maker_id = 3;
+   */
+  makerId: string[] = [];
+
+  /**
+   * シリーズID（複数指定可能、空でも可）
+   *
+   * @generated from field: repeated string series_id = 4;
+   */
+  seriesId: string[] = [];
+
+  /**
+   * 監督ID（複数指定可能、空でも可）
+   *
+   * @generated from field: repeated string director_id = 5;
+   */
+  directorId: string[] = [];
+
+  /**
+   * 取得件数（初期値：20、最大：100、省略可）
+   *
+   * @generated from field: int32 hits = 6;
+   */
+  hits = 0;
+
+  /**
+   * 検索開始位置（初期値：1、最大：50000、省略可）
+   *
+   * @generated from field: int32 offset = 7;
+   */
+  offset = 0;
+
+  /**
+   * ソート順（rank：人気順、price：価格が高い順、-price：価格が安い順、date：発売日順、review：評価順、match：マッチング順、省略可）
+   *
+   * @generated from field: string sort = 8;
+   */
+  sort = "";
+
+  /**
+   * 発売日絞り込み（この日付以降、ISO8601形式 YYYY-MM-DDT00:00:00、省略可）
+   *
+   * @generated from field: string gte_date = 9;
+   */
+  gteDate = "";
+
+  /**
+   * 発売日絞り込み（この日付以前、ISO8601形式 YYYY-MM-DDT00:00:00、省略可）
+   *
+   * @generated from field: string lte_date = 10;
+   */
+  lteDate = "";
+
+  /**
+   * サイト（FANZA または DMM.com、省略可）
+   *
+   * @generated from field: string site = 11;
+   */
+  site = "";
+
+  /**
+   * サービス（例：digital、省略可）
+   *
+   * @generated from field: string service = 12;
+   */
+  service = "";
+
+  /**
+   * フロア（例：videoa、省略可）
+   *
+   * @generated from field: string floor = 13;
+   */
+  floor = "";
+
+  constructor(data?: PartialMessage<GetVideosByIDRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.GetVideosByIDRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "actress_id", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 2, name: "genre_id", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 3, name: "maker_id", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 4, name: "series_id", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 5, name: "director_id", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 6, name: "hits", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 7, name: "offset", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 8, name: "sort", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "gte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "lte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "site", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "floor", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByIDRequest {
+    return new GetVideosByIDRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetVideosByIDRequest {
+    return new GetVideosByIDRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetVideosByIDRequest {
+    return new GetVideosByIDRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetVideosByIDRequest | PlainMessage<GetVideosByIDRequest> | undefined, b: GetVideosByIDRequest | PlainMessage<GetVideosByIDRequest> | undefined): boolean {
+    return proto3.util.equals(GetVideosByIDRequest, a, b);
+  }
+}
+
+/**
+ * キーワードによる検索用メッセージ（すべてのフィールドはoptional）
+ *
+ * @generated from message video.GetVideosByKeywordRequest
+ */
+export class GetVideosByKeywordRequest extends Message<GetVideosByKeywordRequest> {
+  /**
+   * 検索キーワード（省略可）
+   *
+   * @generated from field: string keyword = 1;
+   */
+  keyword = "";
+
+  /**
+   * 取得件数（初期値：20、最大：100、省略可）
+   *
+   * @generated from field: int32 hits = 2;
+   */
+  hits = 0;
+
+  /**
+   * 検索開始位置（初期値：1、最大：50000、省略可）
+   *
+   * @generated from field: int32 offset = 3;
+   */
+  offset = 0;
+
+  /**
+   * ソート順（rank：人気順、price：価格が高い順、-price：価格が安い順、date：発売日順、review：評価順、match：マッチング順、省略可）
+   *
+   * @generated from field: string sort = 4;
+   */
+  sort = "";
+
+  /**
+   * 発売日絞り込み（この日付以降、ISO8601形式 YYYY-MM-DDT00:00:00、省略可）
+   *
+   * @generated from field: string gte_date = 5;
+   */
+  gteDate = "";
+
+  /**
+   * 発売日絞り込み（この日付以前、ISO8601形式 YYYY-MM-DDT00:00:00、省略可）
+   *
+   * @generated from field: string lte_date = 6;
+   */
+  lteDate = "";
+
+  /**
+   * サイト（FANZA または DMM.com、省略可）
+   *
+   * @generated from field: string site = 7;
+   */
+  site = "";
+
+  /**
+   * サービス（例：digital、省略可）
+   *
+   * @generated from field: string service = 8;
+   */
+  service = "";
+
+  /**
+   * フロア（例：videoa、省略可）
+   *
+   * @generated from field: string floor = 9;
+   */
+  floor = "";
+
+  constructor(data?: PartialMessage<GetVideosByKeywordRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.GetVideosByKeywordRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "keyword", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "hits", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 3, name: "offset", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 4, name: "sort", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "gte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "lte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "site", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "floor", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByKeywordRequest {
+    return new GetVideosByKeywordRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetVideosByKeywordRequest {
+    return new GetVideosByKeywordRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetVideosByKeywordRequest {
+    return new GetVideosByKeywordRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetVideosByKeywordRequest | PlainMessage<GetVideosByKeywordRequest> | undefined, b: GetVideosByKeywordRequest | PlainMessage<GetVideosByKeywordRequest> | undefined): boolean {
+    return proto3.util.equals(GetVideosByKeywordRequest, a, b);
+  }
+}
+
+/**
+ * 検索結果レスポンス
+ *
+ * @generated from message video.GetVideosByIDResponse
+ */
+export class GetVideosByIDResponse extends Message<GetVideosByIDResponse> {
+  /**
+   * @generated from field: repeated video.Video videos = 1;
+   */
+  videos: Video[] = [];
+
+  constructor(data?: PartialMessage<GetVideosByIDResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.GetVideosByIDResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByIDResponse {
+    return new GetVideosByIDResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetVideosByIDResponse {
+    return new GetVideosByIDResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetVideosByIDResponse {
+    return new GetVideosByIDResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetVideosByIDResponse | PlainMessage<GetVideosByIDResponse> | undefined, b: GetVideosByIDResponse | PlainMessage<GetVideosByIDResponse> | undefined): boolean {
+    return proto3.util.equals(GetVideosByIDResponse, a, b);
+  }
+}
+
+/**
+ * 検索結果レスポンス
+ *
+ * @generated from message video.GetVideosByKeywordResponse
+ */
+export class GetVideosByKeywordResponse extends Message<GetVideosByKeywordResponse> {
+  /**
+   * @generated from field: repeated video.Video videos = 1;
+   */
+  videos: Video[] = [];
+
+  constructor(data?: PartialMessage<GetVideosByKeywordResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.GetVideosByKeywordResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByKeywordResponse {
+    return new GetVideosByKeywordResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetVideosByKeywordResponse {
+    return new GetVideosByKeywordResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetVideosByKeywordResponse {
+    return new GetVideosByKeywordResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetVideosByKeywordResponse | PlainMessage<GetVideosByKeywordResponse> | undefined, b: GetVideosByKeywordResponse | PlainMessage<GetVideosByKeywordResponse> | undefined): boolean {
+    return proto3.util.equals(GetVideosByKeywordResponse, a, b);
+  }
+}
+
+/**
+ * 後方互換性のための検索用メッセージ（DMM API v3 パラメータに基づく）
  *
  * @generated from message video.SearchVideosRequest
  */
@@ -504,31 +877,95 @@ export class SearchVideosRequest extends Message<SearchVideosRequest> {
   keyword = "";
 
   /**
+   * 女優ID
+   *
    * @generated from field: string actress_id = 2;
    */
   actressId = "";
 
   /**
+   * ジャンルID
+   *
    * @generated from field: string genre_id = 3;
    */
   genreId = "";
 
   /**
+   * メーカーID
+   *
    * @generated from field: string maker_id = 4;
    */
   makerId = "";
 
   /**
+   * シリーズID
+   *
    * @generated from field: string series_id = 5;
    */
   seriesId = "";
 
   /**
-   * ← 追加
+   * 監督ID
    *
    * @generated from field: string director_id = 6;
    */
   directorId = "";
+
+  /**
+   * 取得件数（初期値：20、最大：100）
+   *
+   * @generated from field: int32 hits = 7;
+   */
+  hits = 0;
+
+  /**
+   * 検索開始位置（初期値：1、最大：50000）
+   *
+   * @generated from field: int32 offset = 8;
+   */
+  offset = 0;
+
+  /**
+   * ソート順（rank：人気順、price：価格が高い順、-price：価格が安い順、date：発売日順、review：評価順、match：マッチング順）
+   *
+   * @generated from field: string sort = 9;
+   */
+  sort = "";
+
+  /**
+   * 発売日絞り込み（この日付以降、ISO8601形式 YYYY-MM-DDT00:00:00）
+   *
+   * @generated from field: string gte_date = 10;
+   */
+  gteDate = "";
+
+  /**
+   * 発売日絞り込み（この日付以前、ISO8601形式 YYYY-MM-DDT00:00:00）
+   *
+   * @generated from field: string lte_date = 11;
+   */
+  lteDate = "";
+
+  /**
+   * サイト（FANZA または DMM.com）
+   *
+   * @generated from field: string site = 12;
+   */
+  site = "";
+
+  /**
+   * サービス（例：digital）
+   *
+   * @generated from field: string service = 13;
+   */
+  service = "";
+
+  /**
+   * フロア（例：videoa）
+   *
+   * @generated from field: string floor = 14;
+   */
+  floor = "";
 
   constructor(data?: PartialMessage<SearchVideosRequest>) {
     super();
@@ -544,6 +981,14 @@ export class SearchVideosRequest extends Message<SearchVideosRequest> {
     { no: 4, name: "maker_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "series_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "director_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "hits", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 8, name: "offset", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 9, name: "sort", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "gte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "lte_date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "site", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 14, name: "floor", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SearchVideosRequest {

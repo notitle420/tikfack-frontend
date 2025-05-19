@@ -130,6 +130,14 @@
   opacity: 0.8;
 }
 
+.stats-left {
+  display: flex;
+  gap: 12px;
+}
+
+.stats-right {
+  margin-left: auto;
+}
 
 .video-container:hover .seek-button {
   opacity: 0.3;

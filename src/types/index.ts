@@ -23,6 +23,11 @@ export interface Director {
   name: string;
 }
 
+export interface Review {
+  count: number;
+  average: number;
+}
+
 export interface Video {
   id: string;           // クライアント側での識別用 (dmmIdと同じ値)
   dmmVideoId: string;   // dmm_id フィールド
@@ -34,6 +39,7 @@ export interface Video {
   createdAt: string;    // created_at フィールド
   price: number;
   likesCount: number;   // likes_count フィールド
+  review: Review;
   
   // フロントエンド用の追加フィールド（protoにはないがUIで必要）
   description: string;  // UIでの表示用

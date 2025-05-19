@@ -33,7 +33,7 @@ export const fetchVideos = async (date?: string): Promise<Video[]> => {
   }
   
   // メソッド名をgetVideosByDateに変更
-  const response = await VideoServiceClient.getVideosByDate(request);
+  const response = await VideoServiceClient.getVideosByDate(request) as GetVideosByDateResponse;
   
   // 新しいproto定義に基づいてVideo型に変換
   return response.videos.map((videoPb: any) => ({
@@ -48,6 +48,7 @@ export const fetchVideos = async (date?: string): Promise<Video[]> => {
     createdAt: videoPb.createdAt,
     price: videoPb.price || 0,
     likesCount: videoPb.likesCount,
+    review: videoPb.review || { count: 0, average: 0 },
     
     // UI表示用の追加フィールド
     description: videoPb.title, // タイトルを説明として使用
@@ -73,7 +74,7 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
   // 正しいフィールド名でセット
   request.dmmId = id;
   
-  const response = await VideoServiceClient.getVideoById(request);
+  const response = await VideoServiceClient.getVideoById(request) as GetVideoByIdResponse;
   const videoPb = response.video;
   if (!videoPb) {
     throw new Error("動画が見つかりませんでした");
@@ -91,7 +92,7 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
     createdAt: videoPb.createdAt,
     price: videoPb.price || 0,
     likesCount: videoPb.likesCount,
-    
+    review: videoPb.review || { count: 0, average: 0 },
     // UI表示用の追加フィールド
     description: `${videoPb.title} - ${videoPb.actresses && videoPb.actresses.length > 0 
       ? videoPb.actresses.map(a => a.name).join(', ') 

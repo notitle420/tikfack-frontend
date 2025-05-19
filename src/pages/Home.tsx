@@ -67,6 +67,10 @@ const Home: React.FC = () => {
         sampleUrl: "",
         url: "",
         price: 0,
+        review: {
+          count: 0,
+          average: 0
+        },
         author: {
           id: "default",
           username: "デフォルトユーザー",
