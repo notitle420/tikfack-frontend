@@ -9,7 +9,9 @@ import {
   Genre,
   Maker,
   Series,
-  Director
+  Director,
+  GetVideosByKeywordRequest,
+  GetVideosByKeywordResponse
 } from '../generated/proto/video/video_pb';
 import { SearchVideosRequest } from '../generated/proto/video/video_pb';
 
@@ -116,10 +118,10 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
 };
 
 export const fetchVideosByKeyword = async (keyword: string): Promise<Video[]> => {
-  const request = new SearchVideosRequest();
+  const request = new GetVideosByKeywordRequest;
   request.keyword = keyword;
 
-  const response = await VideoServiceClient.searchVideos(request);
+  const response = await VideoServiceClient.getVideosByKeyword(request) as GetVideosByKeywordResponse ;
 
   return response.videos.map((videoPb: any) => ({
     id: videoPb.dmmId,
@@ -133,6 +135,7 @@ export const fetchVideosByKeyword = async (keyword: string): Promise<Video[]> =>
     price: videoPb.price || 0,
     likesCount: videoPb.likesCount,
     description: videoPb.title,
+    review: videoPb.review || { count: 0, average: 0 },
     author: {
       id: videoPb.actresses && videoPb.actresses.length > 0 ? videoPb.actresses[0].id : "",
       username: getFirstThreeActressNames(videoPb.actresses),
