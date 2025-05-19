@@ -59,7 +59,7 @@ const Search: React.FC = () => {
         setHasMore(false);
       }
       setTimeout(() => {
-        videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth' });
+        videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 0);
     } catch (err) {
       setError('検索に失敗しました');
