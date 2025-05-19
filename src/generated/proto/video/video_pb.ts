@@ -404,6 +404,20 @@ export class GetVideosByDateRequest extends Message<GetVideosByDateRequest> {
    */
   date = "";
 
+  /**
+   * 取得件数（初期値：20、最大：100、省略可）
+   *
+   * @generated from field: int32 hits = 2;
+   */
+  hits = 0;
+
+  /**
+   * 検索開始位置（初期値：1、最大：50000、省略可）
+   *
+   * @generated from field: int32 offset = 3;
+   */
+  offset = 0;
+
   constructor(data?: PartialMessage<GetVideosByDateRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -413,6 +427,8 @@ export class GetVideosByDateRequest extends Message<GetVideosByDateRequest> {
   static readonly typeName = "video.GetVideosByDateRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "date", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "hits", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 3, name: "offset", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByDateRequest {
@@ -441,6 +457,11 @@ export class GetVideosByDateResponse extends Message<GetVideosByDateResponse> {
    */
   videos: Video[] = [];
 
+  /**
+   * @generated from field: video.SearchMetadata metadata = 2;
+   */
+  metadata?: SearchMetadata;
+
   constructor(data?: PartialMessage<GetVideosByDateResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -450,6 +471,7 @@ export class GetVideosByDateResponse extends Message<GetVideosByDateResponse> {
   static readonly typeName = "video.GetVideosByDateResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+    { no: 2, name: "metadata", kind: "message", T: SearchMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByDateResponse {
@@ -786,6 +808,63 @@ export class GetVideosByKeywordRequest extends Message<GetVideosByKeywordRequest
 }
 
 /**
+ * 検索結果のメタデータ
+ *
+ * @generated from message video.SearchMetadata
+ */
+export class SearchMetadata extends Message<SearchMetadata> {
+  /**
+   * 取得件数
+   *
+   * @generated from field: int32 result_count = 1;
+   */
+  resultCount = 0;
+
+  /**
+   * 全体件数
+   *
+   * @generated from field: int32 total_count = 2;
+   */
+  totalCount = 0;
+
+  /**
+   * 検索開始位置
+   *
+   * @generated from field: int32 first_position = 3;
+   */
+  firstPosition = 0;
+
+  constructor(data?: PartialMessage<SearchMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "video.SearchMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 2, name: "total_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 3, name: "first_position", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SearchMetadata {
+    return new SearchMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SearchMetadata {
+    return new SearchMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SearchMetadata {
+    return new SearchMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SearchMetadata | PlainMessage<SearchMetadata> | undefined, b: SearchMetadata | PlainMessage<SearchMetadata> | undefined): boolean {
+    return proto3.util.equals(SearchMetadata, a, b);
+  }
+}
+
+/**
  * 検索結果レスポンス
  *
  * @generated from message video.GetVideosByIDResponse
@@ -796,6 +875,11 @@ export class GetVideosByIDResponse extends Message<GetVideosByIDResponse> {
    */
   videos: Video[] = [];
 
+  /**
+   * @generated from field: video.SearchMetadata metadata = 2;
+   */
+  metadata?: SearchMetadata;
+
   constructor(data?: PartialMessage<GetVideosByIDResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -805,6 +889,7 @@ export class GetVideosByIDResponse extends Message<GetVideosByIDResponse> {
   static readonly typeName = "video.GetVideosByIDResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+    { no: 2, name: "metadata", kind: "message", T: SearchMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByIDResponse {
@@ -835,6 +920,11 @@ export class GetVideosByKeywordResponse extends Message<GetVideosByKeywordRespon
    */
   videos: Video[] = [];
 
+  /**
+   * @generated from field: video.SearchMetadata metadata = 2;
+   */
+  metadata?: SearchMetadata;
+
   constructor(data?: PartialMessage<GetVideosByKeywordResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -844,6 +934,7 @@ export class GetVideosByKeywordResponse extends Message<GetVideosByKeywordRespon
   static readonly typeName = "video.GetVideosByKeywordResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+    { no: 2, name: "metadata", kind: "message", T: SearchMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetVideosByKeywordResponse {
@@ -1017,6 +1108,11 @@ export class SearchVideosResponse extends Message<SearchVideosResponse> {
    */
   videos: Video[] = [];
 
+  /**
+   * @generated from field: video.SearchMetadata metadata = 2;
+   */
+  metadata?: SearchMetadata;
+
   constructor(data?: PartialMessage<SearchVideosResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1026,6 +1122,7 @@ export class SearchVideosResponse extends Message<SearchVideosResponse> {
   static readonly typeName = "video.SearchVideosResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "videos", kind: "message", T: Video, repeated: true },
+    { no: 2, name: "metadata", kind: "message", T: SearchMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SearchVideosResponse {

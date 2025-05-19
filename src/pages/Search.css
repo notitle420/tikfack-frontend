@@ -5,10 +5,10 @@
   background-color: #121212;
   overflow: hidden;
   color: white;
-  padding-top: 60px;
 }
 
 .search-form {
+  height: 64x;
   display: flex;
   padding: 16px;
   z-index: 1;
@@ -65,6 +65,7 @@
 }
 
 .unmute-btn {
+  margin-top: 64px;
   position: fixed;
   top: 20px;
   right: 20px;

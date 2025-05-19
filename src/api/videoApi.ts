@@ -27,13 +27,15 @@ const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => 
   return names.join(', ');
 };
 
-export const fetchVideos = async (date?: string): Promise<Video[]> => {
+export const fetchVideos = async (date?: string, hits: number = 20, offset: number = 1): Promise<Video[]> => {
   const request = new GetVideosByDateRequest();
   if (date) {
     request.date = date;
   } else {
     request.date = "";
   }
+  request.hits = hits;
+  request.offset = offset;
   
   // メソッド名をgetVideosByDateに変更
   const response = await VideoServiceClient.getVideosByDate(request) as GetVideosByDateResponse;
