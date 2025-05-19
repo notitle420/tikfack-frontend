@@ -11,6 +11,7 @@ import {
   Series,
   Director
 } from '../generated/proto/video/video_pb';
+import { SearchVideosRequest } from '../generated/proto/video/video_pb';
 
 // 最初の3人の女優名をカンマ区切りで結合するヘルパー関数
 const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => {
@@ -111,4 +112,35 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
     series: videoPb.series || [],
     directors: videoPb.directors || []
   };
+};
+
+export const fetchVideosByKeyword = async (keyword: string): Promise<Video[]> => {
+  const request = new SearchVideosRequest();
+  request.keyword = keyword;
+
+  const response = await VideoServiceClient.searchVideos(request);
+
+  return response.videos.map((videoPb: any) => ({
+    id: videoPb.dmmId,
+    dmmVideoId: videoPb.dmmId,
+    title: videoPb.title,
+    directUrl: videoPb.directUrl,
+    url: videoPb.url,
+    sampleUrl: videoPb.sampleUrl,
+    thumbnailUrl: videoPb.thumbnailUrl,
+    createdAt: videoPb.createdAt,
+    price: videoPb.price || 0,
+    likesCount: videoPb.likesCount,
+    description: videoPb.title,
+    author: {
+      id: videoPb.actresses && videoPb.actresses.length > 0 ? videoPb.actresses[0].id : "",
+      username: getFirstThreeActressNames(videoPb.actresses),
+      avatarUrl: "/avatars/default.jpg"
+    },
+    actresses: videoPb.actresses || [],
+    genres: videoPb.genres || [],
+    makers: videoPb.makers || [],
+    series: videoPb.series || [],
+    directors: videoPb.directors || []
+  }));
 };
