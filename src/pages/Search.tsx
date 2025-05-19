@@ -19,21 +19,45 @@ const Search: React.FC = () => {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [offset, setOffset] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const videoRefs = useRef<HTMLDivElement[]>([]);
+  const HITS_PER_PAGE = 20;
 
   const handleUnmute = () => {
     setIsMuted(false);
+  };
+
+  const loadMoreVideos = async (currentKeyword: string, currentOffset: number) => {
+    try {
+      const results = await fetchVideosByKeyword(currentKeyword, HITS_PER_PAGE, currentOffset);
+      if (results.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      setVideos(results);
+      setCurrentVideoIndex(0);
+      setTimeout(() => {
+        videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
+    } catch (err) {
+      setError('動画の読み込みに失敗しました');
+    }
   };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setOffset(1);
+    setHasMore(true);
     try {
-      const results = await fetchVideosByKeyword(keyword);
+      const results = await fetchVideosByKeyword(keyword, HITS_PER_PAGE, 1);
       setVideos(results);
       setCurrentVideoIndex(0);
-      // 検索後に最初の動画を表示
+      if (results.length < HITS_PER_PAGE) {
+        setHasMore(false);
+      }
       setTimeout(() => {
         videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth' });
       }, 0);
@@ -86,8 +110,12 @@ const Search: React.FC = () => {
         videoRefs.current[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
         setCurrentVideoIndex(nextIndex);
       }
+    } else if (hasMore && !loading) {
+      const nextOffset = offset + HITS_PER_PAGE;
+      setOffset(nextOffset);
+      loadMoreVideos(keyword, nextOffset);
     }
-  }, [currentVideoIndex, videos.length]);
+  }, [currentVideoIndex, videos.length, hasMore, loading, keyword, offset]);
 
   const scrollToPrevVideo = useCallback(() => {
     const prevIndex = Math.max(currentVideoIndex - 1, 0);
@@ -161,7 +189,7 @@ const Search: React.FC = () => {
         {error && <div className="error">{error}</div>}
         {videos.map((video, index) => (
           <div
-            key={video.id}
+            key={`${video.id}-${index}`}
             ref={(el) => {
               if (el) videoRefs.current[index] = el;
             }}
@@ -175,6 +203,9 @@ const Search: React.FC = () => {
             />
           </div>
         ))}
+        {!hasMore && videos.length > 0 && (
+          <div className="end-message">これ以上の動画はありません</div>
+        )}
       </div>
     </div>
   );

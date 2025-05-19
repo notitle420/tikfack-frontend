@@ -117,11 +117,13 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
   };
 };
 
-export const fetchVideosByKeyword = async (keyword: string): Promise<Video[]> => {
-  const request = new GetVideosByKeywordRequest;
+export const fetchVideosByKeyword = async (keyword: string, hits: number = 20, offset: number = 1): Promise<Video[]> => {
+  const request = new GetVideosByKeywordRequest();
   request.keyword = keyword;
+  request.hits = hits;
+  request.offset = offset;
 
-  const response = await VideoServiceClient.getVideosByKeyword(request) as GetVideosByKeywordResponse ;
+  const response = await VideoServiceClient.getVideosByKeyword(request) as GetVideosByKeywordResponse;
 
   return response.videos.map((videoPb: any) => ({
     id: videoPb.dmmId,
