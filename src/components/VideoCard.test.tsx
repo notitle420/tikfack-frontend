@@ -69,3 +69,34 @@ test('clicking info opens url in new window', () => {
   fireEvent.click(info);
   expect(window.open).toHaveBeenCalledWith(sampleVideo.url, '_blank');
 });
+
+test('shows play overlay when not playing', () => {
+  const { container } = render(<VideoCard video={sampleVideo} isVisible={false} isMuted={true} />);
+  const overlay = container.querySelector('.play-overlay');
+  expect(overlay).toBeInTheDocument();
+});
+
+test('updates muted state on prop change', () => {
+  const { container, rerender } = render(<VideoCard video={sampleVideo} isVisible={true} isMuted={true} />);
+  const video = container.querySelector('video') as HTMLVideoElement;
+  expect(video.muted).toBe(true);
+  rerender(<VideoCard video={sampleVideo} isVisible={true} isMuted={false} />);
+  expect(video.muted).toBe(false);
+});
+
+test('seek buttons change currentTime', () => {
+  const { container } = render(<VideoCard video={sampleVideo} isVisible={true} isMuted={false} />);
+  const video = container.querySelector('video') as HTMLVideoElement;
+  let time = 20;
+  Object.defineProperty(video, 'currentTime', {
+    get: () => time,
+    set: v => { time = v; },
+    configurable: true,
+  });
+  const back = container.querySelector('.seek-backward-icon') as HTMLElement;
+  fireEvent.click(back);
+  expect(time).toBe(10);
+  const forward = container.querySelector('.seek-forward-icon') as HTMLElement;
+  fireEvent.click(forward);
+  expect(time).toBe(20);
+});
