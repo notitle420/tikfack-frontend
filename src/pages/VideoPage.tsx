@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchVideoById, } from '../api/videoApi';
-import { Video } from '../types';
+import { Video, Actress } from '../types';
 import './VideoPage.css';
 
 const VideoPage: React.FC = () => {
   // URLパラメータからIDを取得
   const { id: urlId } = useParams<{ id: string }>();
   const id = urlId || "1"; // デフォルトは最初の動画
+  const navigate = useNavigate();
   
   const [video, setVideo] = useState<Video | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,14 +44,18 @@ const VideoPage: React.FC = () => {
   }, [id]);
 
   // 動画のエラーハンドリング
-  const handleVideoError = () => {
+const handleVideoError = () => {
     // 最初のURLが失敗した場合、代替URLを試す
     if (videoUrl && video?.dmmVideoId) {
       // 代替URLに切り替え
     
     }
     
-    setError('動画の再生に失敗しました');
+  setError('動画の再生に失敗しました');
+};
+
+  const handleActressClick = (actress: Actress) => {
+    navigate('/search', { state: { actressId: actress.id, actressName: actress.name } });
   };
 
   if (loading) {
@@ -80,6 +85,19 @@ const VideoPage: React.FC = () => {
           <img src={video.author.avatarUrl} alt={video.author.username} className="avatar" />
           <span className="username">{video.author.username}</span>
         </div>
+        {video.actresses && video.actresses.length > 0 && (
+          <div className="actress-list">
+            {video.actresses.map(a => (
+              <span
+                key={a.id}
+                className="actress-name"
+                onClick={() => handleActressClick(a)}
+              >
+                {a.name}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="video-description">{video.description}</p>
         <div className="video-stats">
           <span className="likes">♥ {video.likesCount}</span>

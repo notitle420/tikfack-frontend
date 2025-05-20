@@ -123,6 +123,23 @@
   font-weight: bold;
 }
 
+.actress-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.actress-name {
+  cursor: pointer;
+  color: #4da3ff;
+  margin-right: 4px;
+}
+
+.actress-name:hover {
+  text-decoration: underline;
+}
+
 .video-title {
   margin: 0 0 8px 0;
   font-size: 18px;

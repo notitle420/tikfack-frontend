@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { fetchVideosByKeyword } from '../api/videoApi';
-import { Video } from '../types';
+import { fetchVideosByKeyword, fetchVideosByActressId } from '../api/videoApi';
+import { Video, Actress } from '../types';
+import { useLocation } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import './Search.css';
 
@@ -21,16 +22,24 @@ const Search: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [offset, setOffset] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [currentActressId, setCurrentActressId] = useState<string | null>(null);
   const videoRefs = useRef<HTMLDivElement[]>([]);
   const HITS_PER_PAGE = 20;
+  const location = useLocation();
 
   const handleUnmute = () => {
     setIsMuted(false);
   };
 
-  const loadMoreVideos = async (currentKeyword: string, currentOffset: number) => {
+  const loadMoreVideos = async (
+    currentKeyword: string,
+    currentOffset: number,
+    actressId?: string | null
+  ) => {
     try {
-      const results = await fetchVideosByKeyword(currentKeyword, HITS_PER_PAGE, currentOffset);
+      const results = actressId
+        ? await fetchVideosByActressId(actressId, HITS_PER_PAGE, currentOffset)
+        : await fetchVideosByKeyword(currentKeyword, HITS_PER_PAGE, currentOffset);
       if (results.length === 0) {
         setHasMore(false);
         return;
@@ -45,8 +54,33 @@ const Search: React.FC = () => {
     }
   };
 
+  const searchByActress = async (id: string, name: string) => {
+    setKeyword(name);
+    setCurrentActressId(id);
+    setLoading(true);
+    setError(null);
+    setOffset(1);
+    setHasMore(true);
+    try {
+      const results = await fetchVideosByActressId(id, HITS_PER_PAGE, 1);
+      setVideos(results);
+      setCurrentVideoIndex(0);
+      if (results.length < HITS_PER_PAGE) {
+        setHasMore(false);
+      }
+      setTimeout(() => {
+        videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 0);
+    } catch (err) {
+      setError('検索に失敗しました');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    setCurrentActressId(null);
     setLoading(true);
     setError(null);
     setOffset(1);
@@ -67,6 +101,17 @@ const Search: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const handleActressClick = (actress: Actress) => {
+    searchByActress(actress.id, actress.name);
+  };
+
+  useEffect(() => {
+    const state = location.state as { actressId?: string; actressName?: string } | null;
+    if (state && state.actressId) {
+      searchByActress(state.actressId, state.actressName || '');
+    }
+  }, [location.state]);
 
   const findClosestVideoIndex = useCallback(() => {
     let closestIndex = 0;
@@ -113,9 +158,9 @@ const Search: React.FC = () => {
     } else if (hasMore && !loading) {
       const nextOffset = offset + HITS_PER_PAGE;
       setOffset(nextOffset);
-      loadMoreVideos(keyword, nextOffset);
+      loadMoreVideos(keyword, nextOffset, currentActressId);
     }
-  }, [currentVideoIndex, videos.length, hasMore, loading, keyword, offset]);
+  }, [currentVideoIndex, videos.length, hasMore, loading, keyword, offset, currentActressId]);
 
   const scrollToPrevVideo = useCallback(() => {
     const prevIndex = Math.max(currentVideoIndex - 1, 0);
@@ -200,6 +245,7 @@ const Search: React.FC = () => {
               isVisible={index === currentVideoIndex}
               isMuted={isMuted}
               onVideoEnded={scrollToNextVideo}
+              onActressClick={handleActressClick}
             />
           </div>
         ))}

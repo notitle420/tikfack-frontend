@@ -8,6 +8,7 @@ jest.mock('../api/videoApi');
 jest.mock('../components/VideoCard', () => (props: any) => (
   <div data-testid="video-card">{props.video.title}</div>
 ));
+jest.mock('react-router-dom', () => ({ __esModule: true, useLocation: () => ({ state: {} }) }), { virtual: true });
 
 const mockedFetch = fetchVideosByKeyword as jest.MockedFunction<typeof fetchVideosByKeyword>;
 
