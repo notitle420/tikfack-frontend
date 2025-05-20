@@ -22,6 +22,7 @@ const Search: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [offset, setOffset] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [currentActressId, setCurrentActressId] = useState<string | null>(null);
   const videoRefs = useRef<HTMLDivElement[]>([]);
   const HITS_PER_PAGE = 20;
   const location = useLocation();
@@ -30,9 +31,15 @@ const Search: React.FC = () => {
     setIsMuted(false);
   };
 
-  const loadMoreVideos = async (currentKeyword: string, currentOffset: number) => {
+  const loadMoreVideos = async (
+    currentKeyword: string,
+    currentOffset: number,
+    actressId?: string | null
+  ) => {
     try {
-      const results = await fetchVideosByKeyword(currentKeyword, HITS_PER_PAGE, currentOffset);
+      const results = actressId
+        ? await fetchVideosByActressId(actressId, HITS_PER_PAGE, currentOffset)
+        : await fetchVideosByKeyword(currentKeyword, HITS_PER_PAGE, currentOffset);
       if (results.length === 0) {
         setHasMore(false);
         return;
@@ -49,6 +56,7 @@ const Search: React.FC = () => {
 
   const searchByActress = async (id: string, name: string) => {
     setKeyword(name);
+    setCurrentActressId(id);
     setLoading(true);
     setError(null);
     setOffset(1);
@@ -72,6 +80,7 @@ const Search: React.FC = () => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    setCurrentActressId(null);
     setLoading(true);
     setError(null);
     setOffset(1);
@@ -149,9 +158,9 @@ const Search: React.FC = () => {
     } else if (hasMore && !loading) {
       const nextOffset = offset + HITS_PER_PAGE;
       setOffset(nextOffset);
-      loadMoreVideos(keyword, nextOffset);
+      loadMoreVideos(keyword, nextOffset, currentActressId);
     }
-  }, [currentVideoIndex, videos.length, hasMore, loading, keyword, offset]);
+  }, [currentVideoIndex, videos.length, hasMore, loading, keyword, offset, currentActressId]);
 
   const scrollToPrevVideo = useCallback(() => {
     const prevIndex = Math.max(currentVideoIndex - 1, 0);
