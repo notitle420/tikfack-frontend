@@ -18,7 +18,7 @@
 }
 
 .video-item {
-  height: calc(100vh - 48px); /* account for bottom nav */
+  height:100%;
   width: 100%;
   scroll-snap-align: start;
   position: relative;

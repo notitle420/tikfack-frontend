@@ -104,8 +104,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
           <img src={video.author.avatarUrl} alt={video.author.username} className="avatar" />
           <span className="username">{video.author.username}</span>
         </div>
-        <h3 className="video-title">{video.title}</h3>
-        <p className="video-description">{video.description}</p>
+        <p className="video-title">{video.title}</p>
         <div className="video-stats">
           <div className="stats-left">
             <span className="likes">♥ {video.likesCount}</span>

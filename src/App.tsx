@@ -11,7 +11,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />}> 
-          <Route index element={<Top />} />
+          <Route path="top" element={<Top />} />
           <Route path="search" element={<Search />} />
         </Route>
         <Route path="/video/:id" element={<VideoPage />} />

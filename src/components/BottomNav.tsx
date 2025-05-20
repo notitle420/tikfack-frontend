@@ -5,7 +5,7 @@ import './BottomNav.css';
 const BottomNav: React.FC = () => {
   return (
     <nav className="bottom-nav">
-      <NavLink to="/" end className="nav-item">
+      <NavLink to="/top" end className="nav-item">
         Home
       </NavLink>
       <NavLink to="/search" className="nav-item">

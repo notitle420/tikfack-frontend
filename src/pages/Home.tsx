@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
-import './HomeLayout.css';
+import './Home.css';
 
 const Home: React.FC = () => {
   return (

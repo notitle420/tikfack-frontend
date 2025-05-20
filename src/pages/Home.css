@@ -5,7 +5,7 @@
 }
 
 .content {
-  flex: 1 0 auto;
-  padding-bottom: 48px; /* space for bottom nav */
+  position: relative;; /* space for bottom nav */
+  max-width: 100%;
   overflow: hidden;
 }

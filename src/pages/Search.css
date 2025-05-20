@@ -5,6 +5,7 @@
   background-color: #121212;
   overflow: hidden;
   color: white;
+  margin-bottom: 64px;
 }
 
 .search-form {
@@ -41,15 +42,16 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 48px); /* account for bottom nav */
+  height: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
+  margin-bottom: 48px;
 }
 
 .video-item {
-  height: calc(100vh - 48px); /* account for bottom nav */
+  height: 100vh;
   width: 100%;
   scroll-snap-align: start;
   position: relative;
