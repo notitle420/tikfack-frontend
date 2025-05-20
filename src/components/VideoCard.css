@@ -5,6 +5,7 @@
   overflow: hidden;
   border-radius: 8px;
   background-color: #000;
+  margin-bottom: 36px;
 }
 
 .video-container {
@@ -61,8 +62,17 @@
 }
 
 .video-thumbnail-wrapper {
+  max-width: 100%;
   position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .only-image-overlay {
@@ -70,9 +80,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 56px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.7);
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .error-text {
