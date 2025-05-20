@@ -1,0 +1,10 @@
+graph TD
+    User((User)) --> Browser[Browser]
+    Browser --> App[React Application]
+    App -->|Routing| Pages[Top/Search/VideoPage]
+    Pages -->|Fetch Data| VideoApi[videoApi.ts]
+    VideoApi --> Client[VideoServiceClient]
+    Client -->|Connect RPC| APIServer[API Server]
+    APIServer -->|gRPC Response| Client
+    Client --> VideoApi
+    VideoApi --> Pages

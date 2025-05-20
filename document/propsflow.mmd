@@ -1,0 +1,7 @@
+graph TD
+    Top[Top Page] -->|video, isVisible, isMuted, onVideoEnded| VideoCard
+    Search[Search Page] -->|video, isVisible, isMuted, onVideoEnded| VideoCard
+    VideoCard -->|shows video information| UI[Video Elements]
+
+    VideoPage -->|id param| VideoApi
+    VideoApi --> VideoPage
