@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Video } from '../types';
-import { fetchVideosByActressId } from '../api/videoApi';
 import './VideoCard.css';
 
 interface VideoCardProps {
@@ -13,16 +12,6 @@ interface VideoCardProps {
 const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVideoEnded }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const handleActressClick = async (e: React.MouseEvent, actressId: string) => {
-    e.stopPropagation();
-    try {
-      const result = await fetchVideosByActressId(actressId, 5, 1);
-      console.log('Actress videos', result);
-    } catch (err) {
-      console.error('Failed to fetch actress videos', err);
-    }
-  };
 
   const handleRedirectToDMM = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -113,17 +102,8 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
       <div className="video-info" onClick={handleRedirectToDMM}>
         <div className="author-info">
           <img src={video.author.avatarUrl} alt={video.author.username} className="avatar" />
-          <span className="username" onClick={(e) => handleActressClick(e, video.author.id)}>{video.author.username}</span>
+          <span className="username">{video.author.username}</span>
         </div>
-        {video.actresses && video.actresses.length > 0 && (
-          <div className="actress-list">
-            {video.actresses.map((a) => (
-              <span key={a.id} className="actress-name" onClick={(e) => handleActressClick(e, a.id)}>
-                {a.name}
-              </span>
-            ))}
-          </div>
-        )}
         <p className="video-title">{video.title}</p>
         <div className="video-stats">
           <div className="stats-left">

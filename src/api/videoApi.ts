@@ -13,7 +13,7 @@ import {
   GetVideosByKeywordRequest,
   GetVideosByKeywordResponse
 } from '../generated/proto/video/video_pb';
-import { SearchVideosRequest, GetVideosByIDRequest, GetVideosByIDResponse } from '../generated/proto/video/video_pb';
+import { SearchVideosRequest } from '../generated/proto/video/video_pb';
 
 // 最初の3人の女優名をカンマ区切りで結合するヘルパー関数
 const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => {
@@ -126,40 +126,6 @@ export const fetchVideosByKeyword = async (keyword: string, hits: number = 20, o
   request.offset = offset;
 
   const response = await VideoServiceClient.getVideosByKeyword(request) as GetVideosByKeywordResponse;
-
-  return response.videos.map((videoPb: any) => ({
-    id: videoPb.dmmId,
-    dmmVideoId: videoPb.dmmId,
-    title: videoPb.title,
-    directUrl: videoPb.directUrl,
-    url: videoPb.url,
-    sampleUrl: videoPb.sampleUrl,
-    thumbnailUrl: videoPb.thumbnailUrl,
-    createdAt: videoPb.createdAt,
-    price: videoPb.price || 0,
-    likesCount: videoPb.likesCount,
-    description: videoPb.title,
-    review: videoPb.review || { count: 0, average: 0 },
-    author: {
-      id: videoPb.actresses && videoPb.actresses.length > 0 ? videoPb.actresses[0].id : "",
-      username: getFirstThreeActressNames(videoPb.actresses),
-      avatarUrl: "/avatars/default.jpg"
-    },
-    actresses: videoPb.actresses || [],
-    genres: videoPb.genres || [],
-    makers: videoPb.makers || [],
-    series: videoPb.series || [],
-    directors: videoPb.directors || []
-  }));
-};
-
-export const fetchVideosByActressId = async (actressId: string, hits: number = 20, offset: number = 1): Promise<Video[]> => {
-  const request = new GetVideosByIDRequest();
-  request.actressId.push(actressId);
-  request.hits = hits;
-  request.offset = offset;
-
-  const response = await VideoServiceClient.getVideosByID(request) as GetVideosByIDResponse;
 
   return response.videos.map((videoPb: any) => ({
     id: videoPb.dmmId,
