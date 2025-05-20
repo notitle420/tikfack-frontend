@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Video } from '../types';
+import { Video, Actress } from '../types';
 import './VideoCard.css';
 
 interface VideoCardProps {
@@ -7,9 +7,10 @@ interface VideoCardProps {
   isVisible: boolean;
   isMuted: boolean; // ← 追加
   onVideoEnded?: () => void;
+  onActressClick?: (actress: Actress) => void;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVideoEnded }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVideoEnded, onActressClick }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -104,6 +105,22 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, isVisible, isMuted, onVide
           <img src={video.author.avatarUrl} alt={video.author.username} className="avatar" />
           <span className="username">{video.author.username}</span>
         </div>
+        {video.actresses && video.actresses.length > 0 && (
+          <div className="actress-list">
+            {video.actresses.map(a => (
+              <span
+                key={a.id}
+                className="actress-name"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onActressClick && onActressClick(a);
+                }}
+              >
+                {a.name}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="video-title">{video.title}</p>
         <div className="video-stats">
           <div className="stats-left">

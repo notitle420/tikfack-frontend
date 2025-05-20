@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Video } from '../types';
+import { Video, Actress } from '../types';
+import { useNavigate } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import './Top.css';
 import { 
@@ -34,9 +35,14 @@ const Top: React.FC = () => {
   const [isFetchingPrevious, setIsFetchingPrevious] = useState(false);
   const loadedDatesRef = useRef(new Set<string>());
   const [isMuted, setIsMuted] = useState(true);
+  const navigate = useNavigate();
 
   const handleUnmute = () => {
     setIsMuted(false);
+  };
+
+  const handleActressClick = (actress: Actress) => {
+    navigate('/search', { state: { actressId: actress.id, actressName: actress.name } });
   };
   
 
@@ -286,7 +292,13 @@ const Top: React.FC = () => {
             }}
             className="video-item"
           >
-            <VideoCard video={video} isVisible={index === currentVideoIndex} isMuted={isMuted} onVideoEnded={scrollToNextVideo}/>
+            <VideoCard
+              video={video}
+              isVisible={index === currentVideoIndex}
+              isMuted={isMuted}
+              onVideoEnded={scrollToNextVideo}
+              onActressClick={handleActressClick}
+            />
           </div>
         ))}
       </div>
