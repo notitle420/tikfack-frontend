@@ -41,7 +41,7 @@ const { getVideosByDate, getVideoById, getVideosByKeyword } =
 
 describe('fetchVideos', () => {
   it('maps API response to Video objects', async () => {
-    getVideosByDate.mockResolvedValue({ videos: [sampleVideoPb] });
+    getVideosByDate.mockResolvedValue({ videos: [sampleVideoPb] } as any);
 
     const result = await fetchVideos('20230101');
 
@@ -56,7 +56,7 @@ describe('fetchVideos', () => {
 
 describe('fetchVideoById', () => {
   it('maps single video response correctly', async () => {
-    getVideoById.mockResolvedValue({ video: sampleVideoPb });
+    getVideoById.mockResolvedValue({ video: sampleVideoPb } as any);
 
     const result = await fetchVideoById('id1');
 
@@ -67,13 +67,13 @@ describe('fetchVideoById', () => {
   });
 
   it('throws error when response has no video', async () => {
-    getVideoById.mockResolvedValue({});
+    getVideoById.mockResolvedValue({} as any);
     await expect(fetchVideoById('id1')).rejects.toThrow('動画が見つかりませんでした');
   });
 
   it('uses fallback values when optional fields are missing', async () => {
     const noData = { ...sampleVideoPb, review: undefined, actresses: [] as any[] };
-    getVideoById.mockResolvedValue({ video: noData });
+    getVideoById.mockResolvedValue({ video: noData } as any);
     const result = await fetchVideoById('id1');
     expect(result.review).toEqual({ count: 0, average: 0 });
     expect(result.author.username).toBe('不明な女優');
@@ -83,7 +83,7 @@ describe('fetchVideoById', () => {
 
 describe('fetchVideosByKeyword', () => {
   it('fetches videos by keyword', async () => {
-    getVideosByKeyword.mockResolvedValue({ videos: [sampleVideoPb] });
+    getVideosByKeyword.mockResolvedValue({ videos: [sampleVideoPb] } as any);
     const result = await fetchVideosByKeyword('search');
     expect(getVideosByKeyword).toHaveBeenCalled();
     expect(result).toHaveLength(1);
