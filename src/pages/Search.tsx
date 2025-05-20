@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { fetchVideosByKeyword } from '../api/videoApi';
-import { Video } from '../types';
+import { fetchVideosByKeyword, fetchVideosByActressId } from '../api/videoApi';
+import { Video, Actress } from '../types';
+import { useLocation } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import './Search.css';
 
@@ -23,6 +24,7 @@ const Search: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const videoRefs = useRef<HTMLDivElement[]>([]);
   const HITS_PER_PAGE = 20;
+  const location = useLocation();
 
   const handleUnmute = () => {
     setIsMuted(false);
@@ -42,6 +44,29 @@ const Search: React.FC = () => {
       }, 0);
     } catch (err) {
       setError('動画の読み込みに失敗しました');
+    }
+  };
+
+  const searchByActress = async (id: string, name: string) => {
+    setKeyword(name);
+    setLoading(true);
+    setError(null);
+    setOffset(1);
+    setHasMore(true);
+    try {
+      const results = await fetchVideosByActressId(id, HITS_PER_PAGE, 1);
+      setVideos(results);
+      setCurrentVideoIndex(0);
+      if (results.length < HITS_PER_PAGE) {
+        setHasMore(false);
+      }
+      setTimeout(() => {
+        videoRefs.current[0]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 0);
+    } catch (err) {
+      setError('検索に失敗しました');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,6 +92,17 @@ const Search: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const handleActressClick = (actress: Actress) => {
+    searchByActress(actress.id, actress.name);
+  };
+
+  useEffect(() => {
+    const state = location.state as { actressId?: string; actressName?: string } | null;
+    if (state && state.actressId) {
+      searchByActress(state.actressId, state.actressName || '');
+    }
+  }, [location.state]);
 
   const findClosestVideoIndex = useCallback(() => {
     let closestIndex = 0;
@@ -200,6 +236,7 @@ const Search: React.FC = () => {
               isVisible={index === currentVideoIndex}
               isMuted={isMuted}
               onVideoEnded={scrollToNextVideo}
+              onActressClick={handleActressClick}
             />
           </div>
         ))}

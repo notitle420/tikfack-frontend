@@ -6,6 +6,7 @@ import { Video } from '../types';
 
 jest.mock('../api/videoApi');
 jest.mock('../components/VideoCard', () => (props: any) => (<div>{props.video.title}</div>));
+jest.mock('react-router-dom', () => ({ __esModule: true, useNavigate: () => jest.fn() }), { virtual: true });
 
 const mockedFetchVideos = fetchVideos as jest.MockedFunction<typeof fetchVideos>;
 
