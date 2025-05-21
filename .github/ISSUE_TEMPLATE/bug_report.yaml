@@ -16,15 +16,11 @@ body:
     id: expected
     attributes:
       label: 本来どのように動作することを期待していましたか？
-    validations:
-      required: true
 
   - type: textarea
     id: repro
     attributes:
       label: 不具合を再現する手順（できるだけ簡潔かつ正確に記述してください）
-    validations:
-      required: true
 
   - type: textarea
     id: additional
@@ -44,8 +40,6 @@ body:
         ```
 
         </details>
-    validations:
-      required: true
 
   - type: textarea
     id: environment
@@ -74,9 +68,7 @@ body:
       label: インストール方法（該当する場合）
       value: |
         <details>
-
-        # 例: zipから直接展開 / npm install / Docker pull など
-
+        
         </details>
 
   - type: textarea
@@ -85,5 +77,5 @@ body:
       label: 実行環境（例: Node.js,Python,Dockerなどのバージョン）
       value: |
         <details>
-
+        
         </details>
