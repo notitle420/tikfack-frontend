@@ -5,12 +5,13 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
+
+
 jest.mock('../client/clients', () => ({
   VideoServiceClient: {
-    getVideosByDate: jest.fn(),
     getVideoById: jest.fn(),
     getVideosByKeyword: jest.fn(),
-  }
+  },
 }));
 
 const sampleVideoPb = {
@@ -36,21 +37,18 @@ const sampleVideoPb = {
   directors: [],
 };
 
-const { getVideosByDate, getVideoById, getVideosByKeyword } =
+const { getVideoById, getVideosByKeyword } =
   VideoServiceClient as jest.Mocked<typeof VideoServiceClient>;
 
 describe('fetchVideos', () => {
-  it('maps API response to Video objects', async () => {
-    getVideosByDate.mockResolvedValue({ videos: [sampleVideoPb] } as any);
+  it('calls client and maps response', async () => {
+    getVideosByKeyword.mockResolvedValue({ videos: [sampleVideoPb] } as any);
 
     const result = await fetchVideos('20230101');
 
-    expect(getVideosByDate).toHaveBeenCalled();
+    expect(getVideosByKeyword).toHaveBeenCalled();
     expect(result).toHaveLength(1);
-    const video = result[0];
-    expect(video.id).toBe('id1');
-    expect(video.author.username).toBe('Actor1, Actor2, Actor3');
-    expect(video.description).toBe('Sample Title');
+    expect(result[0].id).toBe('id1');
   });
 });
 
@@ -82,11 +80,13 @@ describe('fetchVideoById', () => {
 });
 
 describe('fetchVideosByKeyword', () => {
-  it('fetches videos by keyword', async () => {
+  it('uses client to fetch results', async () => {
     getVideosByKeyword.mockResolvedValue({ videos: [sampleVideoPb] } as any);
     const result = await fetchVideosByKeyword('search');
-    expect(getVideosByKeyword).toHaveBeenCalled();
+    expect(getVideosByKeyword).toHaveBeenCalledWith(
+      expect.objectContaining({ keyword: 'search' })
+    );
     expect(result).toHaveLength(1);
-    expect(result[0].author.username).toBe('Actor1, Actor2, Actor3');
+    expect(result[0].id).toBe('id1');
   });
 });

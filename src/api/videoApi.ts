@@ -1,21 +1,18 @@
 import { Video } from '../types';
-import {VideoServiceClient} from '../client/clients';
+import { VideoServiceClient } from '../client/clients';
 import {
-  GetVideosByDateRequest,
   GetVideoByIdRequest,
-  GetVideosByDateResponse,
   GetVideoByIdResponse,
   Actress,
   Genre,
   Maker,
   Series,
   Director,
-  GetVideosByKeywordRequest,
-  GetVideosByKeywordResponse,
   GetVideosByIDRequest,
-  GetVideosByIDResponse
+  GetVideosByIDResponse,
+  GetVideosByKeywordRequest,
+  GetVideosByKeywordResponse
 } from '../generated/proto/video/video_pb';
-import { SearchVideosRequest } from '../generated/proto/video/video_pb';
 
 // 最初の3人の女優名をカンマ区切りで結合するヘルパー関数
 const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => {
@@ -29,20 +26,22 @@ const getFirstThreeActressNames = (actresses: Actress[] | undefined): string => 
   return names.join(', ');
 };
 
-export const fetchVideos = async (date?: string, hits: number = 20, offset: number = 1): Promise<Video[]> => {
-  const request = new GetVideosByDateRequest();
-  if (date) {
-    request.date = date;
-  } else {
-    request.date = "";
-  }
+export const fetchVideos = async (
+  date?: string,
+  hits: number = 20,
+  offset: number = 1
+): Promise<Video[]> => {
+  const request = new GetVideosByKeywordRequest();
   request.hits = hits;
   request.offset = offset;
-  
-  // メソッド名をgetVideosByDateに変更
-  const response = await VideoServiceClient.getVideosByDate(request) as GetVideosByDateResponse;
-  
-  // 新しいproto定義に基づいてVideo型に変換
+  if (date) {
+    request.gteDate = date;
+    request.lteDate = date;
+  }
+
+  const response = await VideoServiceClient.getVideosByKeyword(
+    request
+  ) as GetVideosByKeywordResponse;
   return response.videos.map((videoPb: any) => ({
     // 基本情報
     id: videoPb.dmmId,
@@ -121,13 +120,19 @@ export const fetchVideoById = async (id: string): Promise<Video> => {
   };
 };
 
-export const fetchVideosByKeyword = async (keyword: string, hits: number = 20, offset: number = 1): Promise<Video[]> => {
+export const fetchVideosByKeyword = async (
+  keyword: string,
+  hits: number = 20,
+  offset: number = 1
+): Promise<Video[]> => {
   const request = new GetVideosByKeywordRequest();
   request.keyword = keyword;
   request.hits = hits;
   request.offset = offset;
 
-  const response = await VideoServiceClient.getVideosByKeyword(request) as GetVideosByKeywordResponse;
+  const response = await VideoServiceClient.getVideosByKeyword(
+    request
+  ) as GetVideosByKeywordResponse;
 
   return response.videos.map((videoPb: any) => ({
     id: videoPb.dmmId,
