@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Top from './pages/Top';
 import VideoPage from './pages/VideoPage';
@@ -12,6 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />}>
+          <Route index element={<Navigate to="top" replace />} />
           <Route
             path="top"
             element={

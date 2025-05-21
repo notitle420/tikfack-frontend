@@ -1,9 +1,9 @@
 import Keycloak from 'keycloak-js';
 
 const keycloak = new (Keycloak as any)({
-    url: "http://localhost:8080",
-    realm: "myrealm",
-    clientId: "frontend-client",
+    url: process.env.REACT_APP_KEYCLOAK_URL,
+    realm: process.env.REACT_APP_KEYCLOAK_REALM,
+    clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID,
     checkLoginIframe: false,
     onLoad: 'login-required',
 });
