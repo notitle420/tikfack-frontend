@@ -1,26 +1,26 @@
 import Keycloak from 'keycloak-js';
 
-const keycloak = new Keycloak({
-  url: process.env.REACT_APP_KEYCLOAK_URL,
-  realm: process.env.REACT_APP_KEYCLOAK_REALM,
-  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID,
+const keycloak = new (Keycloak as any)({
+    url: "http://localhost:8080",
+    realm: "myrealm",
+    clientId: "frontend-client",
+    checkLoginIframe: false,
+    onLoad: 'login-required',
 });
 
-export function initKeycloak(onAuthenticated: () => void) {
-  keycloak
-    .init({
-      onLoad: 'login-required',
-      pkceMethod: 'S256',
-      checkLoginIframe: false,
-    })
-    .then((authenticated) => {
-      if (authenticated) {
-        onAuthenticated();
-      } else {
-        keycloak.login();
-      }
-    })
-    .catch((err) => console.error('Keycloak 初期化失敗', err));
-}
+export const initKeycloak = async (onAuthSuccess: () => void) => {
+    try {
+        const authenticated = await keycloak.init();
+        if (authenticated) {
+            console.log('User is authenticated');
+            onAuthSuccess();
+        } else {
+            console.log('User is not authenticated');
+            keycloak.login()
+        }
+    } catch (error) {
+        console.error('Failed to initialize adapter:', error);
+    }
+};
 
 export default keycloak;
