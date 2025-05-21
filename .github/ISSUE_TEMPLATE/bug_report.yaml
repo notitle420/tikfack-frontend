@@ -1,46 +1,46 @@
 name: バグ報告
-description: Kubernetesの操作中に発生したバグを報告してください
-labels: kind/bug
+description: 不具合があった場合報告してください
+labels: bug
 body:
   - type: textarea
     id: problem
     attributes:
       label: どのような問題が発生しましたか？
       description: |
-        可能な限り詳細な情報を記入してください。不十分な情報の場合、対応が遅れる可能性があります。
-        この問題がセキュリティに関係する場合は、https://kubernetes.io/security から非公開で報告してください。
+        できる限り詳細に記述してください。不十分な情報は、対応の遅れや誤解を招く可能性があります。
+        ※ セキュリティに関する内容の場合は、公開せず開発者へ個別に連絡してください。
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: 本来はどのような動作を期待していましたか？
+      label: 本来どのように動作することを期待していましたか？
     validations:
       required: true
 
   - type: textarea
     id: repro
     attributes:
-      label: 最小かつ正確な再現手順を教えてください
+      label: 不具合を再現する手順（できるだけ簡潔かつ正確に記述してください）
     validations:
       required: true
 
   - type: textarea
     id: additional
     attributes:
-      label: その他に知っておくべきことがあれば記載してください
+      label: その他補足情報（ログ・条件・関連Issueなど）
 
   - type: textarea
-    id: kubeVersion
+    id: appVersion
     attributes:
-      label: Kubernetes のバージョン
+      label: アプリケーションのバージョン
       value: |
         <details>
 
         ```console
-        $ kubectl version
-        # 出力をここに貼り付けてください
+        $ app --version
+        # バージョン情報をここに貼り付けてください
         ```
 
         </details>
@@ -48,33 +48,22 @@ body:
       required: true
 
   - type: textarea
-    id: cloudProvider
+    id: environment
     attributes:
-      label: クラウドプロバイダー
-      value: |
-        <details>
-
-        </details>
-    validations:
-      required: true
-
-  - type: textarea
-    id: osVersion
-    attributes:
-      label: OS のバージョン
+      label: 使用環境（OS / ブラウザ / デバイスなど）
       value: |
         <details>
 
         ```console
         # Linux の場合:
         $ cat /etc/os-release
-        # 出力をここに貼り付けてください
         $ uname -a
-        # 出力をここに貼り付けてください
+
+        # macOS の場合:
+        $ sw_vers
 
         # Windows の場合:
-        C:\> wmic os get Caption, Version, BuildNumber, OSArchitecture
-        # 出力をここに貼り付けてください
+        C:\> systeminfo
         ```
 
         </details>
@@ -82,25 +71,19 @@ body:
   - type: textarea
     id: installer
     attributes:
-      label: インストールに使用したツール
+      label: インストール方法（該当する場合）
       value: |
         <details>
+
+        # 例: zipから直接展開 / npm install / Docker pull など
 
         </details>
 
   - type: textarea
     id: runtime
     attributes:
-      label: コンテナランタイム（CRI）とそのバージョン（該当する場合）
-      value: |
-        <details>
+      label: 実行環境（例: Node.js / Python / Dockerなどのバージョン）
 
-        </details>
-
-  - type: textarea
-    id: plugins
-    attributes:
-      label: 関連するプラグイン（CNI, CSIなど）とそのバージョン（該当する場合）
       value: |
         <details>
 
