@@ -1,59 +1,88 @@
 name: バグ報告
-description: 不具合や想定外の動作について報告するためのテンプレート
-title: "[bug] "
-labels: [bug]
+description: アプリケーションで発生した不具合を報告します
+labels: bug
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ありがとうございます！以下の情報を記入していただけると助かります。
-
-  - type: input
-    id: summary
-    attributes:
-      label: 不具合の概要
-      description: どんな問題が発生したのか簡潔に記載してください。
-      placeholder: 例: 保存ボタンを押しても保存されない
-    validations:
-      required: true
-
   - type: textarea
-    id: steps
+    id: problem
     attributes:
-      label: 再現手順
-      description: どのような操作で問題が発生するか、できるだけ具体的に書いてください。
-      placeholder: |
-        1. ○○ページにアクセス  
-        2. 「保存」ボタンをクリック  
-        3. エラーが表示される
+      label: どのような問題が発生しましたか？
+      description: |
+        できるだけ詳しく記述してください。不明確な報告は対応が遅れる可能性があります。
+        ※ セキュリティ関連の内容は公開せず、別途管理者に連絡してください。
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: 期待される挙動
-      description: 本来はどうなるべきだったのか
-      placeholder: 例: 正常に保存完了メッセージが表示される
+      label: 本来どうなることを期待していましたか？
     validations:
       required: true
 
   - type: textarea
-    id: actual
+    id: repro
     attributes:
-      label: 実際の挙動
-      description: 実際にはどのような挙動になったのか
-      placeholder: 例: 「エラーが発生しました」と表示される
-
-  - type: input
-    id: env
-    attributes:
-      label: 使用環境
-      description: ブラウザやOS、アプリのバージョンなど
-      placeholder: 例: Chrome 124 / iOS 17.4
+      label: 再現手順（できるだけ最小・正確に記載）
+      placeholder: |
+        1. 〇〇画面を開く
+        2. ✕✕をクリック
+        3. エラーが表示される
+    validations:
+      required: true
 
   - type: textarea
-    id: logs
+    id: additional
     attributes:
-      label: ログ / スクリーンショット（任意）
-      description: エラーメッセージや画面キャプチャをここに貼り付けてください
+      label: その他補足情報
+
+  - type: textarea
+    id: appVersion
+    attributes:
+      label: アプリのバージョン情報
+      value: |
+        <details>
+
+        ```console
+        $ app --version
+        # 出力を貼り付けてください
+        ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 使用環境（OS、ブラウザ、端末など）
+      value: |
+        <details>
+
+        ```console
+        # Linux の場合:
+        $ cat /etc/os-release
+        $ uname -a
+
+        # macOS の場合:
+        $ sw_vers
+
+        # Windows の場合:
+        C:\> systeminfo
+        ```
+
+        </details>
+
+  - type: textarea
+    id: installMethod
+    attributes:
+      label: インストール方法（該当する場合）
+
+  - type: textarea
+    id: runtime
+    attributes:
+      label: 実行環境（例: Node.js, Docker, Pythonバージョンなど）
+
+  - type: textarea
+    id: plugins
+    attributes:
+      label: 関連プラグインやライブラリのバージョン（該当する場合）
