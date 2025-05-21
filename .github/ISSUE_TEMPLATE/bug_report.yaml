@@ -1,50 +1,46 @@
 name: バグ報告
-description: アプリケーションで発生した不具合を報告します
-labels: [bug]
+description: Kubernetesの操作中に発生したバグを報告してください
+labels: kind/bug
 body:
   - type: textarea
     id: problem
     attributes:
       label: どのような問題が発生しましたか？
-      description: >
-        できるだけ詳しく記述してください。不明確な報告は対応が遅れる可能性があります。
-        ※ セキュリティ関連の内容は公開せず、別途管理者に連絡してください。
+      description: |
+        可能な限り詳細な情報を記入してください。不十分な情報の場合、対応が遅れる可能性があります。
+        この問題がセキュリティに関係する場合は、https://kubernetes.io/security から非公開で報告してください。
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: 本来どうなることを期待していましたか？
+      label: 本来はどのような動作を期待していましたか？
     validations:
       required: true
 
   - type: textarea
     id: repro
     attributes:
-      label: 再現手順（できるだけ最小・正確に記載）
-      placeholder: |
-        1. 〇〇画面を開く  
-        2. ✕✕をクリック  
-        3. エラーが表示される
+      label: 最小かつ正確な再現手順を教えてください
     validations:
       required: true
 
   - type: textarea
     id: additional
     attributes:
-      label: その他補足情報
+      label: その他に知っておくべきことがあれば記載してください
 
   - type: textarea
-    id: appVersion
+    id: kubeVersion
     attributes:
-      label: アプリのバージョン情報
+      label: Kubernetes のバージョン
       value: |
         <details>
 
         ```console
-        $ app --version
-        # 出力を貼り付けてください
+        $ kubectl version
+        # 出力をここに貼り付けてください
         ```
 
         </details>
@@ -52,37 +48,60 @@ body:
       required: true
 
   - type: textarea
-    id: environment
+    id: cloudProvider
     attributes:
-      label: 使用環境（OS、ブラウザ、端末など）
+      label: クラウドプロバイダー
+      value: |
+        <details>
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: osVersion
+    attributes:
+      label: OS のバージョン
       value: |
         <details>
 
         ```console
         # Linux の場合:
         $ cat /etc/os-release
+        # 出力をここに貼り付けてください
         $ uname -a
-
-        # macOS の場合:
-        $ sw_vers
+        # 出力をここに貼り付けてください
 
         # Windows の場合:
-        C:\> systeminfo
+        C:\> wmic os get Caption, Version, BuildNumber, OSArchitecture
+        # 出力をここに貼り付けてください
         ```
 
         </details>
 
   - type: textarea
-    id: installMethod
+    id: installer
     attributes:
-      label: インストール方法（該当する場合）
+      label: インストールに使用したツール
+      value: |
+        <details>
+
+        </details>
 
   - type: textarea
     id: runtime
     attributes:
-      label: 実行環境（例: Node.js, Docker, Pythonバージョンなど）
+      label: コンテナランタイム（CRI）とそのバージョン（該当する場合）
+      value: |
+        <details>
+
+        </details>
 
   - type: textarea
     id: plugins
     attributes:
-      label: 関連プラグインやライブラリのバージョン（該当する場合）
+      label: 関連するプラグイン（CNI, CSIなど）とそのバージョン（該当する場合）
+      value: |
+        <details>
+
+        </details>
