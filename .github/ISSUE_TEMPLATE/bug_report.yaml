@@ -1,6 +1,6 @@
 name: バグ報告
 description: 不具合があった場合報告してください
-labels: bug
+labels: kind/bug
 body:
   - type: textarea
     id: problem
