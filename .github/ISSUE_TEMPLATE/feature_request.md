@@ -1,32 +1,30 @@
----
-name: Feature request
-about: このプロジェクトへの新機能提案を記述するためのテンプレートです。
-title: "[feature]新機能のリクエスト"
-labels: enhancement, feature, proposal
-assignees: ''
+name: 新機能の提案
+description: このプロジェクトに追加したい新しい機能を提案します
+title: "[feature] "
+labels: [feature]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: 機能の概要
+      placeholder: 例: 動画の連続再生機能を追加する
 
----
+  - type: textarea
+    id: motivation
+    attributes:
+      label: なぜこの機能が必要か
+      description: 解決したい課題や背景
+      placeholder: 例: 毎回操作するのが面倒だから
 
-### この機能リクエストは何か問題に関連していますか？その場合は説明してください
+  - type: textarea
+    id: solution
+    attributes:
+      label: 実装イメージ / 解決案
+      description: どんなUIやAPI、動作になるか
+      placeholder: 例: 再生終了後に自動で次の動画をロードする
 
-例: ○○なときに毎回手動で操作が必要で煩雑です。
-
----
-
-### 実現したいこと・追加したい機能の内容
-
-できるだけ簡潔・明確に機能の目的や内容を記述してください。
-
----
-
-### 解決案・実装イメージ
-
-- どういうUIやAPIになるかのアイディア
-- 状態管理や既存コードとの関係など
-
----
-
-### 追加情報（任意）
-
-- 関連Issueやドキュメント
-- スクリーンショットや設計図があれば共有してください
+  - type: textarea
+    id: others
+    attributes:
+      label: 補足情報（任意）
+      placeholder: 関連Issueやスクリーンショットなど

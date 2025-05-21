@@ -1,41 +1,59 @@
----
-name: Bug report
-about: バグの報告を行う
-title: "[bug]ここに簡単なバグの説明を記述"
-labels: bug
-assignees: ''
+name: バグ報告
+description: 不具合や想定外の動作について報告するためのテンプレート
+title: "[bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ありがとうございます！以下の情報を記入していただけると助かります。
 
----
+  - type: input
+    id: summary
+    attributes:
+      label: 不具合の概要
+      description: どんな問題が発生したのか簡潔に記載してください。
+      placeholder: 例: 保存ボタンを押しても保存されない
+    validations:
+      required: true
 
-### 不具合の概要
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: どのような操作で問題が発生するか、できるだけ具体的に書いてください。
+      placeholder: |
+        1. ○○ページにアクセス  
+        2. 「保存」ボタンをクリック  
+        3. エラーが表示される
+    validations:
+      required: true
 
-どのような問題が発生したかを明確に記述してください。  
-例: ボタンを押しても画面が遷移しない。
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される挙動
+      description: 本来はどうなるべきだったのか
+      placeholder: 例: 正常に保存完了メッセージが表示される
+    validations:
+      required: true
 
----
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の挙動
+      description: 実際にはどのような挙動になったのか
+      placeholder: 例: 「エラーが発生しました」と表示される
 
-### 再現手順
+  - type: input
+    id: env
+    attributes:
+      label: 使用環境
+      description: ブラウザやOS、アプリのバージョンなど
+      placeholder: 例: Chrome 124 / iOS 17.4
 
-1. 〇〇ページにアクセス
-2. 「✕✕」ボタンをクリック
-3. 画面が真っ白になる
-
----
-
-### 期待される挙動
-
-本来どうなるべきだったのかを記述してください。
-
----
-
-### スクリーンショット / ログ（任意）
-
-可能であれば画面キャプチャやエラーログなどを貼り付けてください。
-
----
-
-### 環境情報
-
-- ブラウザ / デバイス: （例: Chrome 123 / iPhone 13）
-- OS: （例: macOS Ventura / Windows 11）
-- バージョン: （例: v1.2.3）
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ / スクリーンショット（任意）
+      description: エラーメッセージや画面キャプチャをここに貼り付けてください
