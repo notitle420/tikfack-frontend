@@ -83,7 +83,6 @@ body:
     id: runtime
     attributes:
       label: 実行環境（例: Node.js / Python / Dockerなどのバージョン）
-
       value: |
         <details>
 
