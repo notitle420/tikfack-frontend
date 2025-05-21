@@ -1,12 +1,12 @@
 name: バグ報告
 description: アプリケーションで発生した不具合を報告します
-labels: bug
+labels: [bug]
 body:
   - type: textarea
     id: problem
     attributes:
       label: どのような問題が発生しましたか？
-      description: |
+      description: >
         できるだけ詳しく記述してください。不明確な報告は対応が遅れる可能性があります。
         ※ セキュリティ関連の内容は公開せず、別途管理者に連絡してください。
     validations:
@@ -24,8 +24,8 @@ body:
     attributes:
       label: 再現手順（できるだけ最小・正確に記載）
       placeholder: |
-        1. 〇〇画面を開く
-        2. ✕✕をクリック
+        1. 〇〇画面を開く  
+        2. ✕✕をクリック  
         3. エラーが表示される
     validations:
       required: true
