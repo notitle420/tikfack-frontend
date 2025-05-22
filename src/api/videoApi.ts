@@ -11,7 +11,9 @@ import {
   GetVideosByIDRequest,
   GetVideosByIDResponse,
   GetVideosByKeywordRequest,
-  GetVideosByKeywordResponse
+  GetVideosByKeywordResponse,
+  GetVideosByDateRequest,
+  GetVideosByDateResponse
 } from '../generated/proto/video/video_pb';
 
 // 最初の3人の女優名をカンマ区切りで結合するヘルパー関数
@@ -31,17 +33,16 @@ export const fetchVideos = async (
   hits: number = 20,
   offset: number = 1
 ): Promise<Video[]> => {
-  const request = new GetVideosByKeywordRequest();
+  const request = new GetVideosByDateRequest();
   request.hits = hits;
   request.offset = offset;
   if (date) {
-    request.gteDate = date;
-    request.lteDate = date;
+    request.date = date;
   }
 
-  const response = await VideoServiceClient.getVideosByKeyword(
+  const response = await VideoServiceClient.getVideosByDate(
     request
-  ) as GetVideosByKeywordResponse;
+  ) as GetVideosByDateResponse;
   return response.videos.map((videoPb: any) => ({
     // 基本情報
     id: videoPb.dmmId,

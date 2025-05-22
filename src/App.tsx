@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Top from './pages/Top';
@@ -6,6 +6,8 @@ import VideoPage from './pages/VideoPage';
 import Search from './pages/Search';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
+
+
 
 function App() {
   return (

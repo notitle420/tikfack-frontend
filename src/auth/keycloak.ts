@@ -1,4 +1,5 @@
 import Keycloak from 'keycloak-js';
+import { jwtDecode } from "jwt-decode";
 
 const keycloak = new (Keycloak as any)({
     url: process.env.REACT_APP_KEYCLOAK_URL,
@@ -10,7 +11,7 @@ const keycloak = new (Keycloak as any)({
 
 export const initKeycloak = async (onAuthSuccess: () => void) => {
     try {
-        const authenticated = await keycloak.init();
+        const authenticated = await keycloak.init()
         if (authenticated) {
             console.log('User is authenticated');
             onAuthSuccess();
