@@ -14,6 +14,8 @@ export const initKeycloak = async (onAuthSuccess: () => void) => {
         const authenticated = await keycloak.init()
         if (authenticated) {
             console.log('User is authenticated');
+            const decodedToken = jwtDecode(keycloak.token);
+            console.log("Decoded Token:", decodedToken);    
             onAuthSuccess();
         } else {
             console.log('User is not authenticated');
